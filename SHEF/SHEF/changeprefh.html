@@ -1,0 +1,202 @@
+<html ng-app="changeprefapp">
+	<title>
+		Update
+	</title>
+	<head>
+		<style type="text/css">
+            *{
+                box-sizing: border-box;
+            }
+            /* Float four columns side by side */
+            .column{
+                float: left;
+                width: 25%;
+                padding: 0 10px;
+            }
+            /* Remove extra left and right margins, due to padding */
+            .row {
+
+            	margin: 0 -5px;}
+            /* Clear floats after the columns */
+            .row:after {
+                content: "";
+                display: table;
+                clear: both;
+            }
+            /* Responsive columns */
+            @media screen and (max-width: 600px) {
+                .column {
+                    width: 100%;
+                    display: block;
+                    margin-bottom: 20px;
+                }
+            }
+            /* Style the counter cards */
+            .card {
+                box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+                padding: 16px;
+                text-align: center;
+                /*background-color: #f1f1f1;*/
+            }
+            .zero-margin {
+                margin: 0px; 
+            }
+        </style> 
+	</head>
+	<script
+		src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.19/angular.js">
+	</script>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
+<!-- Your custom styles (optional) -->
+<link rel="stylesheet" href="style.css">
+	<body ng-controller="MainCtrl as ctrl" ng-click="ctrl.init()" style="background:#c2b8b9;">
+		<div style="padding-top: 105px;">
+	<!--Navbar-->
+	<nav class="navbar navbar-expand-lg navbar-dark fixed-top scrolling-navbar bg-warning">
+		<div class="container">
+			<!-- Navbar brand -->
+			<a class="navbar-brand" href="#">
+			<img style="height: 70px;width: 110px;" src="img/logo2.png">
+			</a>
+
+			<!-- Collapse button -->
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#basicExampleNav"
+			aria-controls="basicExampleNav" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+
+			<!-- Collapsible content -->
+			<div class="collapse navbar-collapse" id="basicExampleNav">
+
+				<!-- Links -->
+				<ul class="navbar-nav mr-auto smooth-scroll">
+					<li class="nav-item">
+						<a class="nav-link" href="userhome.html">Home</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="mydetails.html">My Details</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="exerciserecoh.html">Excercise Recommendations</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="foodrecoh.html">Food Recommendations</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="analytics.html">My Analytics</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="changeprefh.html">Update Details</a>
+					</li>
+					
+
+					
+				</ul>
+			</div>
+
+			<!-- Collapsible content -->
+			<div class="form-inline my-2 my-lg-0" id="navbar-list-4">
+				<ul class="navbar-nav mr-auto smooth-scroll">
+					<li class="nav-item">
+						<a class="nav-link" href="home.html">Logout</a>
+					</li>
+
+					
+				</ul>
+			</div>
+        </div>
+	</nav>
+    <!--/.Navbar-->
+</div>
+		<div id="try" style='text-align: center;display: none;'><div class='row' style='display: inline-block'><div class='card' style='background-color: yellow;'><div id="curr"></div></div></div></div><br>
+	<div class="header">
+		<h2>Update</h2>
+	</div>
+	<form ng-submit="ctrl.submit()" name="cpform">
+	<div class="input-group">
+	<label> Enter Calorie Target:</label>
+	<input type="number" ng-model="ctrl.data.caloriepref" name="cals" min="1000" max="3200" step="100" placeholder="1600"><br>
+	<span ng-show="cpform.cals.$error.number" style="color:red">Invalid Calorie Value </span><br>
+	</div>
+	<div class="input-group">
+	<label> Enter Fats Target:</label>
+	<input type="number" ng-model="ctrl.data.fatpref" name="fats" min="0" max="100" placeholder="33"><br>
+	<span ng-show="cpform.fats.$error.number" style="color:red">Invalid Fats Value </span><br>
+	</div>
+	<div class="input-group">
+	<label> Enter Carbs Target:</label>
+	<input type="number" ng-model="ctrl.data.carbpref" name="carbs" min="0" max="100"  placeholder="34"><br>
+	<span ng-show="cpform.carbs.$error.number" style="color:red">Invalid Carbs Value </span><br>
+	</div>
+	<div class="input-group">
+	<label> Enter Protein Target:</label>
+	<input type="number" ng-model="ctrl.data.proteinpref" name="protein" min="0" max="100" placeholder="33"><br>
+	<span ng-show="cpform.protein.$error.number" style="color:red">Invalid Protein Value </span><br>
+	<span ng-show="ctrl.checktotal()" style="color:red">Percentages need to add up to 100</span><br>
+	</div>
+	<div class="input-group">
+	<label> Enter Current Weight:</label>
+	<input type="number" ng-model="ctrl.data.weight" name="weight" min="40" max="400" placeholder="80"><br>
+	<span ng-show="cpform.weight.$error.number" style="color:red">Invalid Weight Value </span><br>
+	</div>
+	<div class="input-group">
+	<label> Enter Current Height:</label>
+	<input type="number" ng-model="ctrl.data.height" name="height" min="100" max="250" placeholder="160"><br>
+	<span ng-show="cpform.height.$error.number" style="color:red">Invalid Height Value </span><br>
+	</div>
+	<div class="input-group">
+	<button type="submit" ng-disabled="cpform.$invalid  || ctrl.checktotal()" id="logbtn" class="btn">Update </button><br>
+	</div>
+	</form>
+	
+	</body>
+	<script type="text/javascript">
+		var app = angular.module("changeprefapp",[]);
+		app.controller("MainCtrl",['$http',function($http){
+				self = this;
+				self.data= {fatpref:0,carbpref:0,proteinpref:0};
+				self.checktotal = function(){
+					if(self.data.fatpref+self.data.carbpref+self.data.proteinpref==100){
+					return false;
+				}
+				return true;
+				}
+				self.init = function(){
+					$http({
+							method:'get',
+							url:'http://localhost:3000/initpref'
+							
+					}).then(function success(response){
+						var curr = document.getElementById("curr");
+						var t=document.getElementById("try");
+						var obj = response.data;
+						t.style.display="block";
+						curr.innerHTML="<b><br>Current data: <br>Calorie Target: "+ obj[0].caloriepref+"&nbsp;&nbsp; Fat Target: "+obj[0].fatpref+"&nbsp;&nbsp; Carb Target: "+obj[0].carbpref+"&nbsp;&nbsp; Protein Target: "+obj[0].proteinpref+"&nbsp;&nbsp; Height: "+obj[0].height+"&nbsp;&nbsp; Weight: "+obj[0].weight+"<br><br></b>";
+					})
+				}
+				self.submit = function(){
+					$http({
+							method:'post',
+							url:'http://localhost:3000/changepref',
+							data:{
+								fats:self.data.fatpref,
+								carbs:self.data.carbpref,
+								cals:self.data.caloriepref,
+								weight:self.data.weight,
+								height:self.data.height,
+								protein:self.data.proteinpref
+							}
+							
+					}).then(function success(response){
+						//console.log(response.data);
+						window.location = "userhome.html";
+					})
+				}
+		}
+		])
+	</script>
+</html>

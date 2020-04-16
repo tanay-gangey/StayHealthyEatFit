@@ -1,0 +1,206 @@
+<html ng-app="foodrecoapp">
+	<title>
+		Food recommendations
+	</title>
+	<script
+		src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.19/angular.js">
+	</script>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
+<!-- Your custom styles (optional) -->
+<link rel="stylesheet" href="style.css">
+	<head>
+		<style type="text/css">
+            *{
+                box-sizing: border-box;
+            }
+            /* Float four columns side by side */
+            .column{
+                float: left;
+                width: 25%;
+                padding: 0 10px;
+            }
+            /* Remove extra left and right margins, due to padding */
+            .row {
+
+            	margin: 0 -5px;}
+            /* Clear floats after the columns */
+            .row:after {
+                content: "";
+                display: table;
+                clear: both;
+            }
+            /* Responsive columns */
+            @media screen and (max-width: 600px) {
+                .column {
+                    width: 100%;
+                    display: block;
+                    margin-bottom: 20px;
+                }
+            }
+            /* Style the counter cards */
+            .card {
+                box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+                padding: 16px;
+                text-align: center;
+                /*background-color: #f1f1f1;*/
+            }
+            .zero-margin {
+                margin: 0px; 
+            }
+        </style> 
+	</head>
+	<body ng-controller="MainCtrl as ctrl" style="background:#c2b8b9;">
+		<div style="padding-top: 105px;">
+	<!--Navbar-->
+	<nav class="navbar navbar-expand-lg navbar-dark fixed-top scrolling-navbar bg-warning">
+		<div class="container">
+			<!-- Navbar brand -->
+			<a class="navbar-brand" href="#">
+			<img style="height: 70px;width: 110px;" src="img/logo2.png">
+			</a>
+
+			<!-- Collapse button -->
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#basicExampleNav"
+			aria-controls="basicExampleNav" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+
+			<!-- Collapsible content -->
+			<div class="collapse navbar-collapse" id="basicExampleNav">
+
+				<!-- Links -->
+				<ul class="navbar-nav mr-auto smooth-scroll">
+					<li class="nav-item">
+						<a class="nav-link" href="userhome.html">Home</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="mydetails.html">My Details</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="exerciserecoh.html">Excercise Recommendations</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="foodrecoh.html">Food Recommendations</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="analytics.html">My Analytics</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="changeprefh.html">Update Details</a>
+					</li>
+				
+
+					
+				</ul>
+			</div>
+
+			<!-- Collapsible content -->
+			<div class="form-inline my-2 my-lg-0" id="navbar-list-4">
+				<ul class="navbar-nav mr-auto smooth-scroll">
+					<li class="nav-item">
+						<a class="nav-link" href="home.html">Logout</a>
+					</li>
+
+					
+				</ul>
+			</div>
+        </div>
+	</nav>
+    <!--/.Navbar-->
+</div>
+		<center><h1>Here are your food recommendations</h1>
+		<p> Food recommendations are given based on what other users with similar food habits have eaten when they ate the same food item as you!<p>
+		<button ng-click="ctrl.recobreak()" type="button" class="btn-dark btn-sm">Recommend Breakfast </button> | 
+		<button ng-click="ctrl.recolunch()" type="button" class="btn-dark btn-sm">Recommend Lunch </button> | 
+		<button ng-click="ctrl.recodin()" type="button" class="btn-dark btn-sm">Recommend Dinner </button> | 
+		<button ng-click="ctrl.recosnacks()" type="button" class="btn-dark btn-sm">Recommend Snacks </button></center>
+		<div id="break"></div>
+		<div id="lunch"></div>
+		<div id="dinner"></div>
+		<div id="snacks"></div>
+		<br>
+	</body>
+	<script type="text/javascript">
+		var app = angular.module("foodrecoapp",[]);
+		app.controller("MainCtrl",['$http',function($http){
+					self=this;
+					self.recobreak = function(){
+						$http({
+								method:'get',
+								url:'http://localhost:3000/foodreco'
+						
+						}).then(function success(response){
+								var obj = response.data;
+								var bdiv = document.getElementById("break");
+								var n = Object.keys(obj).length-1;
+								var nrand = Math.random()*n;
+								var num = Math.floor(nrand+1);
+								console.log(num);
+								var str="<br><div style='text-align: center;'><div class='row' style='display: inline-block'><div class='card' style='background-color: yellow;'><b>We see that you recently ate "+obj[0].bfast_itms+" for breakfast";
+								str+="<br><br>Similar users ate "+ obj[num].bfast_itms + " after or before eating the above food items for breakfast!</b></div></div></div>";
+								console.log(obj);
+								bdiv.innerHTML = str;
+							})
+					}
+					self.recolunch = function(){
+						$http({
+								method:'get',
+								url:'http://localhost:3000/lunchreco'
+						
+						}).then(function success(response){
+								var obj = response.data;
+								var ldiv = document.getElementById("lunch");
+								var n = Object.keys(obj).length-1;
+								var nrand = Math.random()*n;
+								var num = Math.floor(nrand+1);
+								console.log(num);
+								var str="<br><div style='text-align: center;'><div class='row' style='display: inline-block'><div class='card' style='background-color: yellow;'><b>We see that you recently ate "+obj[0].lunch_itms+" for lunch";
+								str+="<br><br>Similar users ate "+ obj[num].lunch_itms + " after or before eating the above food items for lunch!</b></div></div></div>";
+								console.log(obj);
+								ldiv.innerHTML = str;
+							})
+					}
+					self.recodin = function(){
+						$http({
+								method:'get',
+								url:'http://localhost:3000/dinreco'
+						
+						}).then(function success(response){
+								var obj = response.data;
+								var ddiv = document.getElementById("dinner");
+								var n = Object.keys(obj).length-1;
+								var nrand = Math.random()*n;
+								var num = Math.floor(nrand+1);
+								console.log(num);
+								var str="<br><div style='text-align: center;'><div class='row' style='display: inline-block'><div class='card' style='background-color: yellow;'><b>We see that you recently ate "+obj[0].din_itms+" for dinner";
+								str+="<br><br>Similar users ate "+ obj[num].din_itms + " after or before eating the above food items for dinner!</b></div></div></div>";
+								console.log(obj);
+								ddiv.innerHTML = str;
+							})
+					}
+					self.recosnacks = function(){
+						$http({
+								method:'get',
+								url:'http://localhost:3000/othreco'
+						
+						}).then(function success(response){
+								var obj = response.data;
+								var sdiv = document.getElementById("snacks");
+								var n = Object.keys(obj).length-1;
+								var nrand = Math.random()*n;
+								var num = Math.floor(nrand+1);
+								console.log(num);
+								var str="<br><div style='text-align: center;'><div class='row' style='display: inline-block'><div class='card' style='background-color: yellow;'><b>We see that you recently ate "+obj[0].other_itms+" as snacks";
+								str+="<br><br>Similar users ate "+ obj[num].other_itms + " after or before eating the above food items as snacks!</b></div></div></div><br>";
+								console.log(obj);
+								sdiv.innerHTML = str;
+							})
+					}
+				}
+			])
+	</script>
+</html>

@@ -1,0 +1,390 @@
+
+<html ng-app="analyticsapp">
+	<title>Analytics</title>
+	<script 
+		src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js">
+	</script>
+	<script
+		src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.19/angular.js">
+	</script>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
+<!-- Your custom styles (optional) -->
+<link rel="stylesheet" href="style.css">
+	<body ng-controller="MainCtrl as ctrl" style="background:#c2b8b9;">
+		<div style="padding-top: 105px;">
+	<!--Navbar-->
+	<nav class="navbar navbar-expand-lg navbar-dark fixed-top scrolling-navbar bg-warning">
+		<div class="container">
+			<!-- Navbar brand -->
+			<a class="navbar-brand" href="#">
+			<img style="height: 70px;width: 110px;" src="img/logo2.png">
+			</a>
+
+			<!-- Collapse button -->
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#basicExampleNav"
+			aria-controls="basicExampleNav" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+
+			<!-- Collapsible content -->
+			<div class="collapse navbar-collapse" id="basicExampleNav">
+
+				<!-- Links -->
+				<ul class="navbar-nav mr-auto smooth-scroll">
+					<li class="nav-item">
+						<a class="nav-link" href="userhome.html">Home</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="mydetails.html">My Details</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="exerciserecoh.html">Excercise Recommendations</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="foodrecoh.html">Food Recommendations</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="analytics.html">My Analytics</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="changeprefh.html">Update Details</a>
+					</li>
+					
+
+					
+				</ul>
+			</div>
+
+			<!-- Collapsible content -->
+			<div class="form-inline my-2 my-lg-0" id="navbar-list-4">
+				<ul class="navbar-nav mr-auto smooth-scroll">
+					<li class="nav-item">
+						<a class="nav-link" href="home.html">Logout</a>
+					</li>
+
+					
+				</ul>
+			</div>
+        </div>
+	</nav>
+    <!--/.Navbar-->
+</div>
+	<center><h1> Charts and Graphs! </h1>
+	<div id="charts">
+		<br><button ng-click="ctrl.showcharts1(ctrl.obj)" class="btn">Show Charts</button><br><br>
+	</div><br><br><hr ng-show="ctrl.obj.flag1">
+	<div id="charts2">
+		<br><button ng-click="ctrl.showcharts2(ctrl.obj)" ng-show="ctrl.obj.flag1" class="btn">Show more charts!</button><br><br>
+	</div><br><br><hr ng-show="ctrl.obj.flag1 && ctrl.obj.flag2">
+	<div id="charts3">
+	<br><button ng-click="ctrl.showcharts3(ctrl.obj)" ng-show="ctrl.obj.flag1 && ctrl.obj.flag2" class="btn">Show even more charts!!</button><br><br>
+	</div><br><br><hr ng-show="ctrl.obj.flag1 && ctrl.obj.flag2 && ctrl.obj.flag3">
+	<div id="charts4">
+	<br><button ng-click="ctrl.showcharts4()" ng-show="ctrl.obj.flag1 && ctrl.obj.flag2 && ctrl.obj.flag3" class="btn">Show the last chart!!</button><br><br>
+	</div><br>
+	</center>
+	</body>
+	<script type="text/javascript">
+		var app = angular.module("analyticsapp",[]);
+		app.controller("MainCtrl",['$http',function($http){
+				self=this;
+				self.obj={flag1:false,
+						flag2:false,
+						flag3:false
+						};
+				
+				self.showcharts1 = function(obj){
+					$http({
+							method:'get',
+							url:'http://localhost:3000/getdata'
+							
+						}).then(function success(response){
+								console.log(response.data);
+								var obj = response.data;
+								var totcarb = parseInt(obj[0].bfast_carb||0) + parseInt(obj[0].lunch_carb||0) + parseInt(obj[0].din_carb||0) + parseInt(obj[0].oth_carb||0);
+								var totfat = parseInt(obj[0].bfast_fat||0) + parseInt(obj[0].lunch_fat||0) + parseInt(obj[0].din_fat||0) + parseInt(obj[0].oth_fat||0);
+								var totprot = parseInt(obj[0].bfast_prot||0) + parseInt(obj[0].lunch_prot||0) + parseInt(obj[0].din_prot||0) + parseInt(obj[0].oth_prot||0);
+								var totg = totfat+totcarb+totprot;
+								var cdiv1 = document.getElementById('charts');
+								var ctx = document.createElement("canvas");
+								ctx.setAttribute("style","width:400px !important; height:400px !important;");
+								
+								var myChart = new Chart(ctx, {
+								type: 'doughnut',
+								data: {
+									labels: ['Carbohydrates', 'Fats', 'Protein'],
+									datasets: [{
+										label: '% of Macronutrients',
+										data: [(totcarb/totg)*100, (totfat/totg)*100, (totprot/totg)*100],
+										backgroundColor: [
+											'rgba(255, 99, 132, 0.5)',
+											'rgba(54, 162, 235, 0.5)',
+											'rgba(255, 206, 86, 0.5)'
+										],
+										borderColor: [
+											'rgba(255, 99, 132, 1)',
+											'rgba(54, 162, 235, 1)',
+											'rgba(255, 206, 86, 1)'
+										],
+										borderWidth: 1
+									}]
+								},
+								options: {
+									scales: {
+										yAxes: [{
+											ticks: {
+													beginAtZero: true
+												}
+											}]
+										}
+									}
+								});
+								cdiv1.appendChild(ctx);
+								
+						})
+						obj.flag1=true;
+				}
+				
+				self.showcharts2 = function(obj){
+					$http({
+							method:'get',
+							url:'http://localhost:3000/getdata2'
+							
+						}).then(function success(response){
+								console.log(response.data);
+								var obj = response.data;
+								var totcal = parseInt(obj[0].bfast_cal||0) + parseInt(obj[0].lunch_cal||0) + parseInt(obj[0].din_cal||0) + parseInt(obj[0].oth_cal||0);
+								var totcarb = parseInt(obj[0].bfast_carb||0) + parseInt(obj[0].lunch_carb||0) + parseInt(obj[0].din_carb||0) + parseInt(obj[0].oth_carb||0);
+								var totfat = parseInt(obj[0].bfast_fat||0) + parseInt(obj[0].lunch_fat||0) + parseInt(obj[0].din_fat||0) + parseInt(obj[0].oth_fat||0);
+								var totprot = parseInt(obj[0].bfast_prot||0) + parseInt(obj[0].lunch_prot||0) + parseInt(obj[0].din_prot||0) + parseInt(obj[0].oth_prot||0);
+								var totg = totfat+totcarb+totprot;
+								var cdiv1 = document.getElementById('charts2');
+								var ctx = document.createElement("canvas");
+								ctx.setAttribute("style","width:400px !important; height:400px !important;");
+								var ctx2 = document.createElement("canvas");
+								ctx2.setAttribute("style","width:400px !important; height:400px !important;");
+								var myChart = new Chart(ctx, {
+								type: 'bar',
+								data:  {
+									  labels: [
+										"Carbohydrates",
+										"Fats",
+										"Protein"
+									  ],
+									  datasets: [
+										{
+										  label: "Macro% today",
+										  backgroundColor: "pink",
+										  borderColor: "red",
+										  borderWidth: 1,
+										  data: [(totcarb/totg)*100, (totfat/totg)*100, (totprot/totg)*100]
+										},
+										{
+										  label: "Target Macro%",
+										  backgroundColor: "lightblue",
+										  borderColor: "blue",
+										  borderWidth: 1,
+										  data: [obj[1].carbpref, obj[1].fatpref, obj[1].proteinpref]
+										}
+									  ]
+									},
+								options:  {
+									  responsive: true,
+									  legend: {
+										position: "top"
+									  },
+									  title: {
+										display: true,
+										text: "Macronutrients Chart"
+									  },
+									  scales: {
+										yAxes: [{
+										  ticks: {
+											beginAtZero: true
+										  }
+										}]
+									  }
+									}
+								});
+								
+								var mycalchart = new Chart(ctx2, {
+								type: 'bar',
+								data:  {
+									  labels: [
+										"Calories"
+									  ],
+									  datasets: [
+										{
+										  label: "Calories today",
+										  backgroundColor: "pink",
+										  borderColor: "red",
+										  borderWidth: 1,
+										  data: [totcal]
+										},
+										{
+										  label: "Target Calories",
+										  backgroundColor: "lightblue",
+										  borderColor: "blue",
+										  borderWidth: 1,
+										  data: [obj[1].caloriepref]
+										}
+									  ]
+									},
+								options:  {
+									  responsive: true,
+									  legend: {
+										position: "top"
+									  },
+									  title: {
+										display: true,
+										text: "Calories Chart"
+									  },
+									  scales: {
+										yAxes: [{
+										  ticks: {
+											beginAtZero: true
+										  }
+										}]
+									  }
+									}
+								});
+								cdiv1.appendChild(ctx);
+								cdiv1.appendChild(ctx2);
+						})
+						obj.flag2=true;
+				}
+				
+				self.showcharts3 = function(obj){
+					$http({
+							method:'get',
+							url:'http://localhost:3000/getdata3'
+							
+						}).then(function success(response){
+								console.log(response.data);
+								var obj = response.data;
+								var len = Object.keys(obj).length;
+								var cdiv1 = document.getElementById('charts3');
+								var ctx = document.createElement("canvas");
+								ctx.setAttribute("style","width:400px !important; height:400px !important;");
+								var i=0;
+								var dates = [];
+								var bmi = [];
+								while(i<len){
+									dates.push(obj[i].date);
+									var hsq = (obj[i].height/100)*(obj[i].height/100);
+									bmi.push(obj[i].weight/hsq);
+									i=i+1;
+								}
+								new Chart(ctx, {
+								  type: 'line',
+								  data: {
+									labels: dates,
+									datasets: [ 
+									  { 
+										data: bmi,
+										label: "BMI",
+										borderColor: "#c45850",
+										fill: false
+									  }
+									]
+								  },
+								  options: {
+									title: {
+									  display: true,
+									  text: 'BMI vs Time'
+									},
+									scales: {
+										yAxes: [{
+											display: true,
+											ticks: {
+												suggestedMin: 18,
+												suggestedMax: 30
+											}
+										}]
+									}
+								  }
+								});
+								cdiv1.appendChild(ctx);
+						})
+						obj.flag3=true;
+						
+				}
+				self.showcharts4 = function(){
+					$http({
+							method:'get',
+							url:'http://localhost:3000/getdata4'
+							
+						}).then(function success(response){
+								console.log(response.data);
+								var obj = response.data;
+								var totcal = parseInt(obj[0].bfast_cal||0) + parseInt(obj[0].lunch_cal||0) + parseInt(obj[0].din_cal||0) + parseInt(obj[0].oth_cal||0);
+								var totcarb = parseInt(obj[0].bfast_carb||0) + parseInt(obj[0].lunch_carb||0) + parseInt(obj[0].din_carb||0) + parseInt(obj[0].oth_carb||0);
+								var totfat = parseInt(obj[0].bfast_fat||0) + parseInt(obj[0].lunch_fat||0) + parseInt(obj[0].din_fat||0) + parseInt(obj[0].oth_fat||0);
+								var totprot = parseInt(obj[0].bfast_prot||0) + parseInt(obj[0].lunch_prot||0) + parseInt(obj[0].din_prot||0) + parseInt(obj[0].oth_prot||0);
+								var totg = totfat+totcarb+totprot;
+								var cdiv1 = document.getElementById('charts4');
+								var ctx = document.createElement("canvas");
+								ctx.setAttribute("style","width:400px !important; height:400px !important;");
+								var myChart = new Chart(ctx, {
+								type: 'bar',
+								data:  {
+									  labels: [
+										"Breakfast",
+										"Lunch",
+										"Dinner",
+										"Snacks"
+									  ],
+									  datasets: [
+										{
+										  label: "Protein",
+										  backgroundColor: "pink",
+										  borderColor: "red",
+										  borderWidth: 1,
+										  data: [parseInt(obj[0].bfast_prot||0), parseInt(obj[0].lunch_prot||0), parseInt(obj[0].din_prot||0), parseInt(obj[0].oth_prot||0)]
+										},
+										{
+										  label: "Carbohydrates",
+										  backgroundColor: 'rgba(255, 206, 86, 0.5)',
+										  borderColor: "yellow",
+										  borderWidth: 1,
+										  data: [parseInt(obj[0].bfast_carb||0), parseInt(obj[0].lunch_carb||0), parseInt(obj[0].din_carb||0), parseInt(obj[0].oth_carb||0)]
+										},
+										{
+										  label: "Fats",
+										  backgroundColor: "lightblue",
+										  borderColor: "blue",
+										  borderWidth: 1,
+										  data: [parseInt(obj[0].bfast_fat||0), parseInt(obj[0].lunch_fat||0), parseInt(obj[0].din_fat||0), parseInt(obj[0].oth_fat||0)]
+										}
+									  ]
+									},
+								options:  {
+									  responsive: true,
+									  legend: {
+										position: "top"
+									  },
+									  title: {
+										display: true,
+										text: "Breakfast-Lunch-Dinner-Snacks Macronutrients distribution in grams"
+									  },
+									  scales: {
+										yAxes: [{
+										  ticks: {
+											beginAtZero: true
+										  }
+										}]
+									  }
+									}
+								});
+								cdiv1.appendChild(ctx);
+						})
+						
+				}
+			}
+		])
+	</script>
+</html>

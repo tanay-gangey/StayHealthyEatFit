@@ -1,0 +1,97 @@
+<html ng-app="loginapp">
+	<title>
+		Login
+	</title>
+	<script
+		src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.19/angular.js">
+	</script>
+	<head>
+		<link rel="stylesheet" href="style.css">
+	</head>
+	<br>
+	<a class="navbar-brand" href="#">
+                    <img class="brand_image" src="img/logo2.png" alt="Cinque Terre" id="brand_img">
+                </a>
+	<body ng-controller="MainCtrl as ctrl" bgcolor="orange">
+		<div class="header">
+		<h2>Login</h2>
+	</div>
+		<form ng-submit="ctrl.submit()" name="loginform">
+			<div class="input-group">
+				<label>Username:</label>
+				<input type="text" ng-model="ctrl.usr.uname" required name="uname"><br>
+				<span ng-show="loginform.email.$error.required" style="color:red"> Username is required </span><br>
+			</div>
+			<div class="input-group">
+				<label>Password:</label>
+				<input type="password" ng-model="ctrl.usr.passwd" required ng-minlength="8" name="passwd"><br>
+				<span ng-show="loginform.passwd.$error.required" style="color:red"> Password is required </span><br>
+			</div>
+			<div class="input-group">
+				<button type="submit" ng-disabled="loginform.$invalid" id="logbtn" class="btn">Login </button><br>
+			</div>	
+		</form>
+	</body>
+	<script type="text/javascript">
+		var app = angular.module("loginapp",[]);
+		app.controller("MainCtrl",['$http',function($http){
+			self=this;
+			self.emailstat = 'Does not exist';
+			self.passstat = 'Mismatch'; 
+			self.usr={uname:""};
+			self.submit=function(){
+				console.log("User submitted",self.usr);
+				//put useful onsubmit code here
+				$http({
+						method:'post',
+						url:'http://localhost:3000/passcheck',
+						data:{
+								pass:self.usr.passwd,
+								uname:self.usr.uname
+							}
+				}).then(function success(response){
+						self.passstat = response.data;
+						console.log(response.data);
+				});
+				if(self.passstat=='Match'){
+					window.location='userdetails.html';
+				}
+				
+			}
+			/*self.checkemail=function(){
+				$http({
+						method:'post',
+						url:'emailcheck.php',
+						data:{
+								email:self.usr.email
+							}
+				}).then(function success(response){
+						self.emailstat = response.data;
+						console.log(response.data);
+				});
+				if(self.emailstat=='Exists'){
+					return false;
+				}
+				return true;
+			}
+			self.checkpass= function(){
+				$http({
+						method:'post',
+						url:'passcheck.php',
+						data:{
+								pass:self.usr.passwd,
+								email:self.usr.email
+							}
+				}).then(function success(response){
+						self.passstat = response.data;
+						console.log(response.data);
+				});
+				if(self.passstat=='Match'){
+					return false;
+				}
+				return true;
+			}*/
+		}])
+
+	</script>
+</html>

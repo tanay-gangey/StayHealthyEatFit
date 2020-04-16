@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html ng-app="homeapp">
+	<title>
+		Welcome!
+	</title>
+	<script
+		src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.19/angular.js">
+	</script>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
+<!-- Your custom styles (optional) -->
+<link rel="stylesheet" href="style.css">
+
+	<body ng-controller="MainCtrl as ctrl" ng-click="ctrl.contclick($event)" style="background:#c2b8b9;">
+		<div style="padding-top: 105px;">
+	<!--Navbar-->
+	<nav class="navbar navbar-expand-lg navbar-dark fixed-top scrolling-navbar bg-warning">
+		<div class="container">
+			<!-- Navbar brand -->
+			<a class="navbar-brand" href="#">
+			<img style="height: 70px;width: 110px;" src="img/logo2.png">
+			</a>
+
+			<!-- Collapse button -->
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#basicExampleNav"
+			aria-controls="basicExampleNav" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+
+			<!-- Collapsible content -->
+			<div class="collapse navbar-collapse" id="basicExampleNav">
+
+				<!-- Links -->
+				<ul class="navbar-nav mr-auto smooth-scroll">
+					<li class="nav-item">
+						<a class="nav-link" href="userhome.html">Home</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="mydetails.html">My Details</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="exerciserecoh.html">Excercise Recommendations</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="foodrecoh.html">Food Recommendations</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="analytics.html">My Analytics</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="changeprefh.html">Update Details</a>
+					</li>
+					
+
+					
+				</ul>
+			</div>
+
+			<!-- Collapsible content -->
+			<div class="form-inline my-2 my-lg-0" id="navbar-list-4">
+				<ul class="navbar-nav mr-auto smooth-scroll">
+					<li class="nav-item">
+						<a class="nav-link" href="home.html">Logout</a>
+					</li>
+
+					
+				</ul>
+			</div>
+        </div>
+	</nav>
+    <!--/.Navbar-->
+</div>
+		<h1><center>Welcome - Stay Healthy and Eat Fit</center></h1>
+
+		<form ng-submit="ctrl.submitbreak()" name="breakform">
+		<div class="input-group">		
+		<label>Enter Breakfast Food: </label>
+		<input type="text" ng-model="ctrl.usr.breakfood" ng-keyup='ctrl.getfooditems1()' ng-click="ctrl.sbclicked1($event)" ng-model-options="{debounce: 1000}"><br>
+		</div>
+		<div class="input-group">	
+		<label>Enter Quantity in g </label>
+		<input type="number"  ng-model="ctrl.usr.bqt"><br>
+		<ul id="searchresult" ng-show="ctrl.flag1">
+		<li ng-click="ctrl.setValue1($index,$event)" ng-repeat="result in ctrl.searchresult">{{result.foodname}}</li>
+		</ul>
+		</div>
+		<div class="input-group">
+		<button type="submit" class="btn">Submit</button><br>
+		</div>
+		</form>
+		<br>
+		<form ng-submit="ctrl.submitlunch()" name="lunchform">
+		<div class="input-group">	
+		<label>Enter Lunch Food: </label>
+		<input type="text" ng-model="ctrl.usr.lunchfood" ng-keyup='ctrl.getfooditems2()' ng-click="ctrl.sbclicked2($event)" ng-model-options="{debounce: 1000}"><br>
+		</div>
+		<div class="input-group">
+		<label>Enter Quantity in g </label>
+		<input type="number"  ng-model="ctrl.usr.lqt"><br>
+		<ul id="searchresult" ng-show="ctrl.flag2">
+		<li ng-click="ctrl.setValue2($index,$event)" ng-repeat="result in ctrl.searchresult">{{result.foodname}}</li>
+		</ul>
+		</div>
+		<div class="input-group">
+		<button type="submit" class="btn">Submit</button><br>
+		</div>
+		</form>
+		<br>
+		<form ng-submit="ctrl.submitdin()" name="dinform">
+		<div class="input-group">
+		<label>Enter Dinner Food: </label>
+		<input type="text" ng-model="ctrl.usr.dinfood" ng-keyup='ctrl.getfooditems3()' ng-click="ctrl.sbclicked3($event)" ng-model-options="{debounce: 1000}"><br>
+		</div>
+		<div class="input-group">
+		<label>Enter Quantity in g </label>
+		<input type="number"  ng-model="ctrl.usr.dqt"><br>
+		<ul id="searchresult" ng-show="ctrl.flag3">
+		<li ng-click="ctrl.setValue3($index,$event)" ng-repeat="result in ctrl.searchresult">{{result.foodname}}</li>
+		</ul>
+		</div>
+		<div class="input-group">
+		<button type="submit" class="btn">Submit</button><br>
+		</div>
+		<br>
+		</form>
+		<br>
+		<form ng-submit="ctrl.submitoth()" name="othform">
+		<div class="input-group">	
+		<label>Enter Snacks/Other Food: </label>
+		<input type="text" ng-model="ctrl.usr.othfood" ng-keyup='ctrl.getfooditems4()' ng-click="ctrl.sbclicked4($event)" ng-model-options="{debounce: 1000}"><br>
+		</div>
+		<div class="input-group">
+		<label>Enter Quantity in g </label>
+		<input type="number"  ng-model="ctrl.usr.oqt"><br>
+		<ul id="searchresult" ng-show="ctrl.flag4">
+		<li ng-click="ctrl.setValue4($index,$event)" ng-repeat="result in ctrl.searchresult">{{result.foodname}}</li>
+		</ul>
+		</div>
+		<div class="input-group">
+		<button type="submit" class="btn">Submit</button><br>
+		</div>
+		</form>
+		<br>
+		<form ng-submit="ctrl.submitexer()" name="exerform">
+		<div class="input-group">	
+		<label>Enter Exercise: </label>
+		<input type="text" ng-model="ctrl.usr.exercise" ng-keyup='ctrl.getexeritems()' ng-click="ctrl.sbclicked5($event)" ng-model-options="{debounce: 1000}"><br>
+		</div>
+		<div class="input-group">
+		<label>Enter Time in min </label>
+		<input type="number"  ng-model="ctrl.usr.eqt"><br>
+		<ul id="searchresult" ng-show="ctrl.flag5">
+		<li ng-click="ctrl.setValue5($index,$event)" ng-repeat="result in ctrl.searchresult">{{result.exercise}}</li>
+		</ul>
+		</div>
+		<div class="input-group">
+		<button type="submit" class="btn">Submit</button><br>
+		</div>
+		</form>
+		<br>
+		</body>
+	<script type="text/javascript">
+		var app = angular.module("homeapp",[]);
+		app.controller("MainCtrl", ['$http',function($http){
+				self=this;
+				self.flag1 = false;
+				self.flag2 = false;
+				self.flag3 = false;
+				self.flag4 = false;
+				self.flag5 = false;
+				self.searchresult={}
+				self.submitbreak = function(){
+					//submit breakfast
+					$http({
+						method:'post',
+						url:'http://localhost:3000/idb',
+						data:{breakfood:self.usr.breakfood,
+								qty:self.usr.bqt
+						}
+					}).then(function success(response){
+						alert("Breakfast item added!");
+						console.log(self.usr.bqt);
+						console.log(response.data);
+					})
+				}
+				self.submitlunch = function(){
+					//submit lunch
+					$http({
+						method:'post',
+						url:'http://localhost:3000/idl',
+						data:{lunchfood:self.usr.lunchfood,
+								qty:self.usr.lqt
+							}
+					}).then(function success(response){
+						alert("Lunch item added!");
+						console.log(self.usr.lqt);
+						console.log(response.data);
+					})
+				}
+				self.submitdin = function(){
+					//submit dinner
+					$http({
+						method:'post',
+						url:'http://localhost:3000/idd',
+						data:{dinfood:self.usr.dinfood,
+								qty:self.usr.dqt
+							}
+					}).then(function success(response){
+						alert("Dinner item added!");
+						console.log(self.usr.dqt);
+						console.log(response.data);
+					})
+				}
+				self.submitoth = function(){
+					//submit other
+					$http({
+						method:'post',
+						url:'http://localhost:3000/ido',
+						data:{othfood:self.usr.othfood,
+								qty:self.usr.oqt
+							}
+					}).then(function success(response){
+						alert("Snacks item added!");
+						console.log(self.usr.oqt);
+						console.log(response.data);
+					})
+				}
+				self.submitexer = function(){
+					$http({
+						method:'post',
+						url:'http://localhost:3000/exer',
+						data:{exercise:self.usr.exercise,
+								qty:self.usr.eqt
+							}
+					}).then(function success(response){
+						alert("Exercise item added!");
+						console.log(self.usr.eqt);
+						console.log(response.data);
+					})
+				}
+				//XHR OVER HERE 
+				self.getfooditems1 =function(){
+					self.searchresult={}
+                                        //alert("hiiiii")
+					var textlen = self.usr.breakfood.trim().length;
+					if(textlen>0){
+						$http({
+								method:'post',
+								url:'http://localhost:3000/getfood',
+								data:{
+									strtomatch:self.usr.breakfood
+								}
+						}).then(function successCallback(response){
+								self.searchresult = response.data;
+                                                                //alert("bye")
+							})
+					}
+					else{
+						self.searchresult={};
+					}
+				}
+				self.getfooditems2 =function(){
+					self.searchresult={}
+					var textlen = self.usr.lunchfood.trim().length;
+					if(textlen>0){
+						$http({
+								method:'post',
+								url:'http://localhost:3000/getfood',
+								data:{
+									strtomatch:self.usr.lunchfood
+								}
+						}).then(function successCallback(response){
+								self.searchresult = response.data;
+							})
+					}
+					else{
+						self.searchresult={};
+					}
+				}
+				self.getfooditems3 =function(){
+					self.searchresult={}
+					var textlen = self.usr.dinfood.trim().length;
+					if(textlen>0){
+						$http({
+								method:'post',
+								url:'http://localhost:3000/getfood',
+								data:{
+									strtomatch:self.usr.dinfood
+								}
+						}).then(function successCallback(response){
+								self.searchresult = response.data;
+							})
+					}
+					else{
+						self.searchresult={};
+					}
+				}
+				self.getfooditems4 =function(){
+					self.searchresult={}
+					var textlen = self.usr.othfood.trim().length;
+					if(textlen>0){
+						$http({
+								method:'post',
+								url:'http://localhost:3000/getfood',
+								data:{
+									strtomatch:self.usr.othfood
+								}
+						}).then(function successCallback(response){
+								self.searchresult = response.data;
+							})
+					}
+					else{
+						self.searchresult={};
+					}
+				}
+				self.getexeritems =function(){
+					self.searchresult={}
+					var textlen = self.usr.exercise.trim().length;
+					if(textlen>0){
+						$http({
+								method:'post',
+								url:'http://localhost:3000/getexer',
+								data:{
+									strtomatch:self.usr.exercise
+								}
+						}).then(function successCallback(response){
+								self.searchresult = response.data;
+							})
+					}
+					else{
+						self.searchresult={};
+					}
+				}
+				self.setValue1 = function($index,$event){
+					console.log(self.usr);
+					self.usr.breakfood = self.searchresult[$index].foodname;
+					self.searchresult={};
+					self.flag1=false;
+					$event.stopPropagation();
+				}
+				self.setValue2 = function($index,$event){
+					console.log(self.usr);
+					self.usr.lunchfood = self.searchresult[$index].foodname;
+					self.searchresult={};
+					self.flag2=false;
+					$event.stopPropagation();
+				}
+				self.setValue3 = function($index,$event){
+					console.log(self.usr);
+					self.usr.dinfood = self.searchresult[$index].foodname;
+					self.searchresult={};
+					self.flag3=false;
+					$event.stopPropagation();
+				}
+				self.setValue4 = function($index,$event){
+					console.log(self.usr);
+					self.usr.othfood = self.searchresult[$index].foodname;
+					self.searchresult={};
+					self.flag4=false;
+					$event.stopPropagation();
+				}
+				self.setValue5 = function($index,$event){
+					console.log(self.usr);
+					self.usr.exercise = self.searchresult[$index].exercise;
+					self.searchresult={};
+					self.flag5=false;
+					$event.stopPropagation();
+				}
+				self.sbclicked1 = function($event){
+						self.flag1=true;
+						console.log(self.usr);
+						$event.stopPropagation();
+				}
+				self.sbclicked2 = function($event){
+						self.flag2=true;
+						console.log(self.usr);
+						$event.stopPropagation();
+				}
+				self.sbclicked3 = function($event){
+						self.flag3=true;
+						console.log(self.usr);
+						$event.stopPropagation();
+				}
+				self.sbclicked4 = function($event){
+						self.flag4=true;
+						console.log(self.usr);
+						$event.stopPropagation();
+				}
+				self.sbclicked5 = function($event){
+						self.flag5=true;
+						console.log(self.usr);
+						$event.stopPropagation();
+				}
+				self.contclick = function()
+				{
+					searchresult={};
+				}
+				
+			}
+		])
+
+	</script>
+</html>

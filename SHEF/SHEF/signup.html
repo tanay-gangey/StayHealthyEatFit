@@ -1,0 +1,99 @@
+<html ng-app="signupapp">
+	<title>
+		Sign Up
+	</title>
+	<script
+		src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.19/angular.js">
+	</script>
+	<head>
+		<link rel="stylesheet" href="style.css">
+	</head>
+	<br>
+	<a class="navbar-brand" href="#">
+                    <img class="brand_image" src="img/logo2.png" alt="Cinque Terre" id="brand_img">
+                </a>
+	<body ng-controller="MainCtrl as ctrl" bgcolor="orange">
+		<div class="header">
+		<h2>Sign up</h2>
+	</div>
+			
+				<form ng-submit="ctrl.submit()" name="signupform">
+					<div class="input-group">
+				<label>Username:</label>
+				<input type="text" ng-model="ctrl.usr.name" required ng-minlength="3" name="uname" ng-blur="ctrl.checkuname()"><br>
+				<span ng-show="signupform.uname.$error.required" style="color:red;">Username is required</span>
+				<span ng-show="signupform.uname.$error.minlength" style="color:red;">Username needs to have at least 3 characters</span><br>
+				<span ng-show="ctrl.exists(ctrl.unamestat)" style="color:red;">Username already exists </span><br>
+			</div>
+			<div class="input-group">	
+				<label>Email:</label>
+				<input type="email" ng-model="ctrl.usr.email" required name="email"><br>
+				<span ng-show="signupform.email.$error.required" style="color:red;">Email is required</span><br>
+				<span ng-show="signupform.email.$error.email" style="color:red;">Email is invalid</span><br>
+			</div>
+			<div class="input-group">	
+				<label>Password:</label>
+				<input type="password" ng-model="ctrl.usr.passwd" required ng-minlength="8" name="passwd" 
+				ng-pattern="/^(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,20}$/"><br>
+				<span ng-show="signupform.passwd.$error.required" style="color:red;">Password is required</span><br>
+				<span ng-show="signupform.passwd.$error.minlength" style="color:red;">Password must have at least 8 characters</span><br>
+				<span ng-show="signupform.passwd.$error.pattern" style="color:red;">Password must have at least one uppercase,lowercase,digit and special character </span><br>
+			</div>
+			<div class="input-group">	
+				<button type="submit" ng-disabled="loginform.$invalid" id="logbtn" class="btn">Sign Up</button><br>
+			</div>
+		</form>
+		<br>
+		<br>
+	</body>
+	<script type="text/javascript">
+		angular.module("signupapp",[]).controller("MainCtrl",['$http',function($http){
+			self=this;
+			self.unamestat='Available';
+			self.insertstat='Inserted';
+			self.submit=function(){
+				$http({
+						method:'post',
+						url:'http://localhost:3000/users',
+						data:{username:self.usr.name, email:self.usr.email, pass:self.usr.passwd}
+					}).then(function success(response){
+								self.insertstat = response.data;
+                                                                alert("hiiii");
+				alert("bye");				});
+				console.log(self.insertstat);
+				if(self.insertstat=='Inserted'){
+					console.log("User submitted",self.usr.name);
+					window.location = "login.html";
+				}
+				else{
+					console.log(self.insertstat);
+				}
+			}
+			self.checkuname = function(){
+				//check db if username already exists
+				$http({
+						method:'post',
+						url:'http://localhost:3000/checkusers',
+						data:{username:self.usr.name}
+					}).then(function success(response){
+								self.unamestat = response.data;
+								});
+				console.log(self.usr.name);
+			}
+			self.exists = function(unamestat){
+				if(unamestat == 'Available')
+				{
+					console.log("Available!!!");
+					return false;
+				}
+				else
+				{
+					return true;
+				}
+			}
+
+		
+		}])
+		
+	</script>
+</html>

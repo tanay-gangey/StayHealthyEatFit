@@ -1,0 +1,112 @@
+<html ng-app="dapp">
+	<title>
+			Details
+	</title>
+	<script
+		src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.19/angular.js">
+	</script>
+	<head>
+		<link rel="stylesheet" href="style.css">
+	</head>
+	<br>
+	<a class="navbar-brand" href="#">
+                    
+                </a>
+	<body ng-controller="MainCtrl as ctrl" bgcolor="orange">
+		<div class="header">
+		<h2>Enter details</h2>
+	</div>
+		<form ng-submit="ctrl.submit()" name="detailsform">
+			<div class="input-group">
+				<label>Enter Gender:</label>
+				<input type="text" ng-model="ctrl.usr.gender" ng-minlength="4" name="gender" ng-blur="ctrl.show()"><br>
+				<span ng-show="detailsform.gender.$error.minlength" style="color:red;">Gender needs to have at least 4 characters</span><br>
+			</div>
+			<div class="input-group">	
+				<label>Enter Daily Calories Target:</label>
+				<input type="number" ng-model="ctrl.usr.cals"  required name="cals" ng-blur="ctrl.show()" min="1000" max="3200" step="100"><br>
+				<span ng-show="detailsform.cals.$error.required" style="color:red;">Calories target is required</span><br>
+				<span ng-show="detailsform.cals.$error.number" style="color:red;">Invalid Calories target</span><br>
+			</div>
+			<div class="input-group">	
+				<label>Enter Daily Fat% Target:</label>
+				<input type="number" ng-model="ctrl.usr.fats"  required name="fats" ng-blur="ctrl.show()" min="0" max="100"><br>
+				<span ng-show="detailsform.fats.$error.required" style="color:red;">Fat% target is required</span><br>
+				<span ng-show="detailsform.fats.$error.number" style="color:red;">Invalid Fat% target</span><br>
+			</div>
+			<div class="input-group">	
+				<label>Enter Daily Protein% Target:</label>
+				<input type="number" ng-model="ctrl.usr.protein"  required name="protein" ng-blur="ctrl.show()" min="0" max="100"><br>
+				<span ng-show="detailsform.protein.$error.required" style="color:red;">Protein% target is required</span><br>
+				<span ng-show="detailsform.protein.$error.number" style="color:red;">Invalid Protein% target</span><br>
+			</div>
+			<div class="input-group">	
+				<label>Enter Daily Carbohydrate% Target:</label>
+				<input type="number" ng-model="ctrl.usr.carbs"  required name="carbs" ng-blur="ctrl.show()" min="0" max="100"><br>
+				<span ng-show="detailsform.carbs.$error.required" style="color:red;">Carbohydrate% target is required</span><br>
+				<span ng-show="detailsform.carbs.$error.number" style="color:red;">Invalid Carbohydrate% target</span><br>
+				<span ng-show="ctrl.checktotal()" style="color:red;"> Percentages need to add up to 100</span><br>
+			</div>
+			<div class="input-group">	
+				<label><br>Enter Current Weight in kg:</label>
+				<input type="number" ng-model="ctrl.usr.weight"  required name="weight" ng-blur="ctrl.show()" min="40" max="400"><br>
+				<span ng-show="detailsform.weight.$error.required" style="color:red;">Current weight is required</span><br>
+				<span ng-show="detailsform.protein.$error.number" style="color:red;">Invalid weight value</span><br>
+			</div>
+			<div class="input-group">	
+				<label>Enter Current Height in cm:</label>
+				<input type="number" ng-model="ctrl.usr.height"  required name="height" ng-blur="ctrl.show()" min="100" max="250"><br>
+				<span ng-show="detailsform.height.$error.required" style="color:red;">Height is required</span><br>
+				<span ng-show="detailsform.height.$error.number" style="color:red;">Invalid Height value</span><br>
+			</div>
+			<div class="input-group">	
+				<button type="submit" ng-disabled="detailsform.$invalid || ctrl.checktotal()" id="logbtn" class="btn">Add</button>
+				<button onclick="skip()" class="btn" style="background-color: green;">Skip</button>
+			</div>
+		</form>
+		
+	</body>
+	<script>
+		var app= angular.module("dapp",[]);
+		app.controller("MainCtrl",['$http',function($http){
+			self = this;
+			self.upstat = "Details Not Entered"
+			self.usr={fats:0,carbs:0,protein:0};
+			self.submit = function(){
+				$http({
+						method:'post',
+						url:'http://localhost:3000/updatedetails',
+						data: {	gender:self.usr.gender,
+								fats:self.usr.fats,
+								carbs:self.usr.carbs,
+								cals:self.usr.cals,
+								weight:self.usr.weight,
+								height:self.usr.height,
+								protein:self.usr.protein}
+					}).then(function success(response){
+						self.upstat = response.data;
+						console.log(self.upstat);
+						window.location = 'userhome.html';
+					});
+	
+			}
+			self.show = function(){
+				console.log(self.usr);
+			}
+			self.checktotal = function(){
+				if(self.usr.fats+self.usr.carbs+self.usr.protein==100){
+					return false;
+				}
+				return true;
+			}
+			
+		}
+		])
+		
+		
+		function skip(){
+			window.location = "userhome.html";
+		}
+		
+	</script>
+			
